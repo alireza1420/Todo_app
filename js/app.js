@@ -2,14 +2,41 @@ const userTaskInput=document.getElementById("task-input");
 const userDateInput=document.getElementById("date-input");
 const addButton=document.getElementById("add-button");
 const alertMessage=document.getElementById( "alert-message" );
+const deleteAllButton=document.getElementById('delete-all-button');
+const tableData = document.getElementById("todo-list").children[1];
 
 const todos = JSON.parse(localStorage.getItem("todos")) || [];
 
+const generateId = () => {
+
+    return Math.round(Math.random() * Math.random() * Math.pow(10,15));
+}
+
 const saveToLocalStorage=()=>{
 
-   localStorage.setItem('todos', JSON.stringify(todos));
+    userItems= localStorage.setItem('todos', JSON.stringify(todos));
+   
+ }
 
+const displayTodos=()=>{
+
+    if(!todos.length){
+        tableData.innerHTML= `<tr> <td> Data not found</td> </tr>`;
+        
+    }
+    todos.forEach(todo => {
+        console.log(todo.completed);
+        tableData.innerHTML+=
+        `<tr>
+        <td>${todo.task}</td>
+        <td>${todo.date}</td>
+        <td>${(todo.completed) ? "Completed" : "Pending"}</td>
+        <td><button>Edit</button> <button>Do</button> <button>Delete</button></td>
+    </tr>`
+    
+    });
 }
+
 
 const showAlert= (message, type) =>{
     alertMessage.innerHTML="";
@@ -21,10 +48,8 @@ const showAlert= (message, type) =>{
 
 }
 
-const generateId = () => {
 
-    return Math.round(Math.random() * Math.random() * Math.pow(10,15));
-}
+
 
 const addHandler=() => {
 
@@ -60,4 +85,10 @@ const addHandler=() => {
             }
 }
 
+const deleteAllHandler = () => {
+    localStorage.clear();
+}
+
 addButton.addEventListener('click',addHandler);
+deleteAllButton.addEventListener('click',deleteAllHandler)
+displayTodos();
